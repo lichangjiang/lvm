@@ -1,0 +1,9 @@
+/.vscode/
+/.work
+/.cache
+/.idea
+
+/_output
+/vendor/
+/vendor.orig/
+
