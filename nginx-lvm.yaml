@@ -4,6 +4,14 @@ metadata:
   name: nginx
   namespace: default
 spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values: [node3]
   containers:
   - name: nginx
     image: nginx

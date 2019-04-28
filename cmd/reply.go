@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	InitResponse      = `{"status": "Success","capabilities":{"attach":True}}`
+	InitResponse      = `{"status": "Success","capabilities":{"attach":true}}`
 	AttachResponse    = `{status: Success, device:"%s"}`
 	DetachResponse    = `{"status": "Success"}`
 	IsAttachResponse  = `{"status": "Success", "attached":true}`
@@ -15,7 +15,7 @@ const (
 )
 
 func ReplyStr(response string) error {
-	fmt.Println(response)
+	fmt.Print(response)
 	return nil
 }
 
