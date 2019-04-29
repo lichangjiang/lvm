@@ -22,7 +22,7 @@ func init() {
 }
 
 func isMounted(mntPath string) (bool, error) {
-	cmd := exec.Command(fmt.Sprintf(`findmnt -n %s 2>/dev/null | cut -d' ' -f1`, mntPath))
+	cmd := exec.Command("/bin/bash","-c",fmt.Sprintf(`findmnt -n %s 2>/dev/null | cut -d' ' -f1`, mntPath))
 	r, err := cmd.Output()
 	if err != nil {
 		return false, err
@@ -45,10 +45,10 @@ func mountDevicePlugin(cmd *cobra.Command, args []string) error {
 
 	fsType := opt.FsType
 
-	if fInfo, err := os.Lstat(dmDev); err != nil {
+	if fInfo, err := os.Stat(dmDev); err != nil {
 		return err
-	} else if fInfo.Mode() != os.ModeDevice {
-		return errors.New(fmt.Sprintf("%s does not exist", dmDev))
+	} else if fInfo.Mode() & os.ModeDevice == 0 {
+		return errors.New(fmt.Sprintf("%s is not block device", dmDev))
 	}
 
 	if r, err := isMounted(mntPath); err != nil {
@@ -57,7 +57,7 @@ func mountDevicePlugin(cmd *cobra.Command, args []string) error {
 		ReplyStr(SuccessResponse)
 	}
 
-	execCmd := exec.Command(fmt.Sprintf(`blkid -o udev %s 2>/dev/null|grep "ID_FS_TYPE"|cut -d"=" -f2`, dmDev))
+	execCmd := exec.Command("/bin/bash","-c",fmt.Sprintf(`blkid -o udev %s 2>/dev/null|grep "ID_FS_TYPE"|cut -d"=" -f2`, dmDev))
 	result, err := execCmd.Output()
 
 	if err != nil {
@@ -65,7 +65,8 @@ func mountDevicePlugin(cmd *cobra.Command, args []string) error {
 	}
 
 	if string(result) == "" {
-		execCmd = exec.Command(`mkfs -t %s %s >/dev/null 2>&1`, fsType, dmDev)
+		//获取lvmd的文件系统格式
+		execCmd = exec.Command("/bin/bash","-c",fmt.Sprintf(`mkfs -t %s %s >/dev/null 2>&1`, fsType, dmDev))
 
 		if _, err := execCmd.Output(); err != nil {
 			return errors.New(fmt.Sprintf("Failed to create fs %s on device %s with cmd result %s", fsType, dmDev, err.Error()))
@@ -73,8 +74,7 @@ func mountDevicePlugin(cmd *cobra.Command, args []string) error {
 	}
 
 	os.MkdirAll(mntPath, os.ModePerm)
-
-	execCmd = exec.Command(fmt.Sprintf(`mount %s %s &> /dev/null`, dmDev, mntPath))
+	execCmd = exec.Command("/bin/bash","-c",fmt.Sprintf(`mount %s %s &> /dev/null`, dmDev, mntPath))
 	if _, err := execCmd.Output(); err != nil {
 		return errors.New(fmt.Sprintf("Failed to mount device %s at %s with error %s", dmDev, mntPath, err.Error()))
 	}

@@ -26,6 +26,6 @@ spec:
       driver: "lcj/lvm"
       fsType: "ext4"
       options:
-        volumeID: "vol1"
+        volumeID: "LogVol00"
         size: "1000m"
-        volumegroup: "kube_vg"
+        volumegroup: "VolGroup00"

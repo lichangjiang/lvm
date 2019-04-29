@@ -25,9 +25,20 @@
   revision = "298182f68c66c05229eb03ac171abe6e309ee79a"
   version = "v1.0.3"
 
+[[projects]]
+  branch = "v2"
+  digest = "1:64b89d4c768e5c183db0dae85ce2f30009d1a1053b915d6d83426304a17849da"
+  name = "gopkg.in/pipe.v2"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "3c2ca4d525447ec8b2f606a6974f9c9f40831f26"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  input-imports = ["github.com/spf13/cobra"]
+  input-imports = [
+    "github.com/spf13/cobra",
+    "gopkg.in/pipe.v2",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -11,7 +11,8 @@ spec:
     spec:
       containers:
         # TODO Change to your container registry.
-        - image: "172.17.8.101:30002/flexmnt/lvm:v0.1.0"
+        - image: riverlcj/lvm:v1.0.0
+          imagePullPolicy: Always
           name: flex-deploy
           securityContext:
             privileged: true

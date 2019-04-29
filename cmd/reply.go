@@ -6,7 +6,7 @@ import (
 
 const (
 	InitResponse      = `{"status": "Success","capabilities":{"attach":true}}`
-	AttachResponse    = `{status: Success, device:"%s"}`
+	AttachResponse    = `{"status": "Success", "device":"%s"}`
 	DetachResponse    = `{"status": "Success"}`
 	IsAttachResponse  = `{"status": "Success", "attached":true}`
 	FailResponse      = `{"status":"Failure","message":"%s"}`

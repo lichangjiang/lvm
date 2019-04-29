@@ -46,10 +46,11 @@ func attachPlugin(cmd *cobra.Command, args []string) error {
 	//size := opt.Size
 	device := getdevice(&opt)
 
-	if devFileInfo, err := os.Lstat(device); err != nil {
+	//使用Stat()方法跟踪连接文件
+	if devFileInfo, err := os.Stat(device); err != nil {
 		return err
-	} else if devFileInfo.Mode() != os.ModeDevice {
-		return errors.New(fmt.Sprintf("Volume %s does not exist", device))
+	} else if devFileInfo.Mode() & os.ModeDevice == 0 {
+		return errors.New(fmt.Sprintf("Volume %s is not block device", device))
 	}
 
 	return ReplyStr(fmt.Sprintf(AttachResponse, device))

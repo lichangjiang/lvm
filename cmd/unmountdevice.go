@@ -23,7 +23,7 @@ func init() {
 func unmountDevicePlugin(cmd *cobra.Command, args []string) error {
 
 	mntPath := args[0]
-	if fInfo, err := os.Lstat(mntPath); err != nil {
+	if fInfo, err := os.Stat(mntPath); err != nil {
 		return err
 	} else if !fInfo.IsDir() {
 		ReplyStr(SuccessResponse)
@@ -35,7 +35,7 @@ func unmountDevicePlugin(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	execCmd := exec.Command(`umount %s &> /dev/null`, mntPath)
+	execCmd := exec.Command("/bin/bash","-c",fmt.Sprintf(`umount %s &> /dev/null`, mntPath))
 	if _, err := execCmd.Output(); err != nil {
 		return errors.New(fmt.Sprintf("Failed to unmount volume at %s", mntPath))
 	}
